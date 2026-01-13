@@ -107,6 +107,49 @@ MIN_DURATION_SECONDS=20
 PROMPT_PREVIEW_LENGTH=45
 ```
 
+### Configuration Options Explained
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `NOTIFIER_LANG` | `en` | UI language. `en` for English, `ko` for Korean. Affects notification messages and slash command responses. |
+| `MIN_DURATION_SECONDS` | `20` | Minimum task duration to trigger notification. Tasks completing faster than this won't show notifications. Set to `0` to notify on every task. |
+| `PROMPT_PREVIEW_LENGTH` | `45` | Number of characters to show from your original prompt in the notification. |
+
+### Notification Messages
+
+Messages are automatically set based on `NOTIFIER_LANG`:
+
+| Event | English | 한국어 |
+|-------|---------|--------|
+| Task completed | Task completed! | 작업 완료! |
+| Permission required | Permission required! | 권한 필요! |
+| Waiting for input | Waiting for input... | 입력 대기 중... |
+
+### Examples
+
+**Quick tasks without notifications:**
+```bash
+# Only notify for tasks taking 60+ seconds
+/notifier duration 60
+```
+
+**Always notify:**
+```bash
+# Notify on every task completion
+/notifier duration 0
+```
+
+**Longer prompt preview:**
+```bash
+# Show more of the original prompt
+/notifier preview 100
+```
+
+**Switch to Korean:**
+```bash
+/notifier lang ko
+```
+
 ## How It Works
 
 This tool uses Claude Code's [hooks system](https://docs.anthropic.com/en/docs/claude-code/hooks) to:
