@@ -2,6 +2,8 @@
 # cleanup-session.sh - Cleans up session files when Claude Code session ends
 # Hook: SessionEnd
 
+set -e
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 

@@ -2,6 +2,8 @@
 # linux.sh - Linux notification using notify-send
 # Called from notify.sh
 
+set -e
+
 # Check if notify-send is available
 if ! command -v notify-send &> /dev/null; then
     exit 0
