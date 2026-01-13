@@ -5,8 +5,10 @@
 $MIN_DURATION = [int]$env:MIN_DURATION_SECONDS
 if ($MIN_DURATION -eq 0) { $MIN_DURATION = 30 }
 
-$MSG_COMPLETED = $env:MSG_COMPLETED
-if (-not $MSG_COMPLETED) { $MSG_COMPLETED = "Task completed!" }
+$NOTIFY_MSG = $env:NOTIFY_MESSAGE
+if (-not $NOTIFY_MSG) { $NOTIFY_MSG = "Task completed!" }
+
+$NOTIF_TYPE = $env:NOTIFICATION_TYPE
 
 $DATA_DIR = $env:NOTIFIER_DATA_DIR_WIN
 if (-not $DATA_DIR) {
@@ -36,43 +38,47 @@ try {
     # Use default session ID on error
 }
 
-# Check elapsed time
-$timestampFile = Join-Path $DATA_DIR "timestamp-$sessionId.txt"
-if (-not (Test-Path $timestampFile)) {
-    exit 0
-}
-
-try {
-    $startTime = [int](Get-Content $timestampFile -Raw -ErrorAction SilentlyContinue)
-    $currentTime = [int](Get-Date -UFormat %s)
-    $elapsed = $currentTime - $startTime
-
-    # Skip notification if task was too short
-    if ($elapsed -lt $MIN_DURATION) {
-        exit 0
-    }
-} catch {
-    # Continue with notification on error
-}
-
-# Read prompt preview
-$promptFile = Join-Path $DATA_DIR "prompt-$sessionId.txt"
 $escapedPrompt = ""
 
-if (Test-Path $promptFile) {
+# For Notification hooks (permission_prompt, idle_prompt), skip duration check
+if (-not $NOTIF_TYPE -or $NOTIF_TYPE -eq "null") {
+    # Stop hook: check elapsed time
+    $timestampFile = Join-Path $DATA_DIR "timestamp-$sessionId.txt"
+    if (-not (Test-Path $timestampFile)) {
+        exit 0
+    }
+
     try {
-        $savedPrompt = Get-Content $promptFile -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
-        if ($savedPrompt -and $savedPrompt.Trim()) {
-            # Escape XML special characters
-            $escapedPrompt = $savedPrompt.Trim()
-            $escapedPrompt = $escapedPrompt -replace '&', '&amp;'
-            $escapedPrompt = $escapedPrompt -replace '<', '&lt;'
-            $escapedPrompt = $escapedPrompt -replace '>', '&gt;'
-            $escapedPrompt = $escapedPrompt -replace '"', '&quot;'
-            $escapedPrompt = $escapedPrompt -replace "'", '&apos;'
+        $startTime = [int](Get-Content $timestampFile -Raw -ErrorAction SilentlyContinue)
+        $currentTime = [int](Get-Date -UFormat %s)
+        $elapsed = $currentTime - $startTime
+
+        # Skip notification if task was too short
+        if ($elapsed -lt $MIN_DURATION) {
+            exit 0
         }
     } catch {
-        # Empty prompt on error
+        # Continue with notification on error
+    }
+
+    # Read prompt preview
+    $promptFile = Join-Path $DATA_DIR "prompt-$sessionId.txt"
+
+    if (Test-Path $promptFile) {
+        try {
+            $savedPrompt = Get-Content $promptFile -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+            if ($savedPrompt -and $savedPrompt.Trim()) {
+                # Escape XML special characters
+                $escapedPrompt = $savedPrompt.Trim()
+                $escapedPrompt = $escapedPrompt -replace '&', '&amp;'
+                $escapedPrompt = $escapedPrompt -replace '<', '&lt;'
+                $escapedPrompt = $escapedPrompt -replace '>', '&gt;'
+                $escapedPrompt = $escapedPrompt -replace '"', '&quot;'
+                $escapedPrompt = $escapedPrompt -replace "'", '&apos;'
+            }
+        } catch {
+            # Empty prompt on error
+        }
     }
 }
 
@@ -84,7 +90,7 @@ if ($escapedPrompt) {
 <toast>
     <visual>
         <binding template="ToastText02">
-            <text id="1">$MSG_COMPLETED</text>
+            <text id="1">$NOTIFY_MSG</text>
             <text id="2">$escapedPrompt</text>
         </binding>
     </visual>
@@ -95,7 +101,7 @@ if ($escapedPrompt) {
 <toast>
     <visual>
         <binding template="ToastText01">
-            <text id="1">$MSG_COMPLETED</text>
+            <text id="1">$NOTIFY_MSG</text>
         </binding>
     </visual>
 </toast>

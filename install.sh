@@ -86,6 +86,7 @@ CLEANUP_CMD="$INSTALL_DIR/scripts/cleanup-session.sh"
 add_hook() {
     local hook_type="$1"
     local command="$2"
+    local matcher="$3"  # Optional matcher for Notification hooks
 
     # Check if hook with this command already exists
     local exists=$(jq --arg cmd "$command" --arg type "$hook_type" '
@@ -99,15 +100,27 @@ add_hook() {
         return
     fi
 
-    # Add the hook
-    local hook_entry=$(jq -n --arg cmd "$command" '{
-        "hooks": [
-            {
-                "type": "command",
-                "command": $cmd
-            }
-        ]
-    }')
+    # Add the hook (with or without matcher)
+    if [ -n "$matcher" ]; then
+        local hook_entry=$(jq -n --arg cmd "$command" --arg matcher "$matcher" '{
+            "matcher": $matcher,
+            "hooks": [
+                {
+                    "type": "command",
+                    "command": $cmd
+                }
+            ]
+        }')
+    else
+        local hook_entry=$(jq -n --arg cmd "$command" '{
+            "hooks": [
+                {
+                    "type": "command",
+                    "command": $cmd
+                }
+            ]
+        }')
+    fi
 
     jq --arg type "$hook_type" --argjson entry "$hook_entry" '
         .hooks //= {} |
@@ -115,13 +128,17 @@ add_hook() {
         .hooks[$type] += [$entry]
     ' "$SETTINGS_FILE" > "${SETTINGS_FILE}.tmp" && mv "${SETTINGS_FILE}.tmp" "$SETTINGS_FILE"
 
-    echo "  $hook_type hook registered"
+    echo "  $hook_type${matcher:+ ($matcher)} hook registered"
 }
 
 # Register hooks
 add_hook "UserPromptSubmit" "$SAVE_PROMPT_CMD"
 add_hook "Stop" "$NOTIFY_CMD"
 add_hook "SessionEnd" "$CLEANUP_CMD"
+
+# Register Notification hooks with matchers
+add_hook "Notification" "$NOTIFY_CMD" "permission_prompt"
+add_hook "Notification" "$NOTIFY_CMD" "idle_prompt"
 
 echo ""
 echo -e "${GREEN}Installation complete!${NC}"

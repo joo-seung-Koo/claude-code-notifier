@@ -13,7 +13,8 @@ fi
 
 # Read config from environment or use defaults
 MIN_DURATION=${MIN_DURATION_SECONDS:-30}
-MSG_COMPLETED=${MSG_COMPLETED:-"Task completed!"}
+NOTIFY_MSG=${NOTIFY_MESSAGE:-"Task completed!"}
+NOTIF_TYPE=${NOTIFICATION_TYPE:-""}
 
 # Read stdin (JSON from Claude Code)
 INPUT=$(cat)
@@ -29,34 +30,40 @@ if [ -z "$SESSION_ID" ]; then
     SESSION_ID="default"
 fi
 
-# Check elapsed time
-TIMESTAMP_FILE="$DATA_DIR/timestamp-${SESSION_ID}.txt"
-if [ ! -f "$TIMESTAMP_FILE" ]; then
-    exit 0
-fi
+# For Notification hooks (permission_prompt, idle_prompt), skip duration check
+if [ -z "$NOTIF_TYPE" ] || [ "$NOTIF_TYPE" = "null" ]; then
+    # Stop hook: check elapsed time
+    TIMESTAMP_FILE="$DATA_DIR/timestamp-${SESSION_ID}.txt"
+    if [ ! -f "$TIMESTAMP_FILE" ]; then
+        exit 0
+    fi
 
-START_TIME=$(cat "$TIMESTAMP_FILE" 2>/dev/null)
-CURRENT_TIME=$(date +%s)
-ELAPSED=$((CURRENT_TIME - START_TIME))
+    START_TIME=$(cat "$TIMESTAMP_FILE" 2>/dev/null)
+    CURRENT_TIME=$(date +%s)
+    ELAPSED=$((CURRENT_TIME - START_TIME))
 
-# Skip if task was too short
-if [ "$ELAPSED" -lt "$MIN_DURATION" ]; then
-    exit 0
-fi
+    # Skip if task was too short
+    if [ "$ELAPSED" -lt "$MIN_DURATION" ]; then
+        exit 0
+    fi
 
-# Read prompt preview
-PROMPT_FILE="$DATA_DIR/prompt-${SESSION_ID}.txt"
-PROMPT_TEXT=""
+    # Read prompt preview
+    PROMPT_FILE="$DATA_DIR/prompt-${SESSION_ID}.txt"
+    PROMPT_TEXT=""
 
-if [ -f "$PROMPT_FILE" ]; then
-    PROMPT_TEXT=$(cat "$PROMPT_FILE" 2>/dev/null)
-fi
+    if [ -f "$PROMPT_FILE" ]; then
+        PROMPT_TEXT=$(cat "$PROMPT_FILE" 2>/dev/null)
+    fi
 
-# Show notification
-if [ -n "$PROMPT_TEXT" ]; then
-    notify-send "Claude Code" "$MSG_COMPLETED\n$PROMPT_TEXT"
+    # Show notification with prompt
+    if [ -n "$PROMPT_TEXT" ]; then
+        notify-send "Claude Code" "$NOTIFY_MSG\n$PROMPT_TEXT"
+    else
+        notify-send "Claude Code" "$NOTIFY_MSG"
+    fi
 else
-    notify-send "Claude Code" "$MSG_COMPLETED"
+    # Notification hook: show immediately without duration check
+    notify-send "Claude Code" "$NOTIFY_MSG"
 fi
 
 exit 0
