@@ -2,11 +2,11 @@
 
 [English](README.md) | [한국어](README.ko.md)
 
-Claude Code 작업 완료 시 알림을 받아보세요 (WSL/macOS/Linux)
+Claude Code 작업 완료 시 알림을 받아보세요 (Windows/macOS/Linux)
 
 ## 기능
 
-- **크로스 플랫폼**: Windows (WSL2), macOS, Linux 지원
+- **크로스 플랫폼**: Windows (Native/WSL2), macOS, Linux 지원
 - **스마트 알림**: 20초 이상 걸린 작업만 알림
 - **프롬프트 미리보기**: 입력한 질문의 앞부분 표시
 - **세션 인식**: 여러 Claude Code 세션을 독립적으로 관리
@@ -19,6 +19,7 @@ Claude Code 작업 완료 시 알림을 받아보세요 (WSL/macOS/Linux)
 |--------|------|
 | macOS | ✅ 테스트 완료 |
 | Linux | ✅ 테스트 완료 (Docker) |
+| Windows (Native) | ⚠️ 미테스트 |
 | Windows (WSL2) | ⚠️ 미테스트 |
 
 > 문제를 발견하셨나요? [Issue를 열어주세요](https://github.com/js-koo/claude-code-notifier/issues)!

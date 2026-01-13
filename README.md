@@ -2,11 +2,11 @@
 
 [English](README.md) | [한국어](README.ko.md)
 
-Get notified when Claude Code completes your tasks (WSL/macOS/Linux)
+Get notified when Claude Code completes your tasks (Windows/macOS/Linux)
 
 ## Features
 
-- **Cross-platform**: Windows (WSL2), macOS, and Linux support
+- **Cross-platform**: Windows (Native/WSL2), macOS, and Linux support
 - **Smart notifications**: Only notifies for tasks taking 20+ seconds
 - **Prompt preview**: Shows the first few characters of your prompt
 - **Session-aware**: Multiple Claude Code sessions work independently
@@ -19,6 +19,7 @@ Get notified when Claude Code completes your tasks (WSL/macOS/Linux)
 |----------|--------|
 | macOS | ✅ Tested |
 | Linux | ✅ Tested (Docker) |
+| Windows (Native) | ⚠️ Not tested yet |
 | Windows (WSL2) | ⚠️ Not tested yet |
 
 > Found an issue? Please [open an issue](https://github.com/js-koo/claude-code-notifier/issues)!

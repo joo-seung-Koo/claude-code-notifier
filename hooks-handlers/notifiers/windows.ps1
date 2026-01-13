@@ -1,5 +1,5 @@
 # windows.ps1 - Windows Toast Notification for Claude Code
-# Called from notify.sh via WSL
+# Called from notify.sh via Windows Native (Git Bash/MSYS2) or WSL
 
 # Read configuration from environment variables
 $MIN_DURATION = [int]$env:MIN_DURATION_SECONDS

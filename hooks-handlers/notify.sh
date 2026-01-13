@@ -34,7 +34,14 @@ export NOTIFY_MESSAGE
 export NOTIFICATION_TYPE
 
 # Detect OS and route to appropriate notifier
-if grep -qi microsoft /proc/version 2>/dev/null; then
+if [ "$OS" = "Windows_NT" ]; then
+    # Windows Native (Git Bash, MSYS2)
+    # Convert Unix path to Windows path
+    NOTIFIER_DATA_DIR_WIN=$(cygpath -w "$DATA_DIR" 2>/dev/null || echo "$DATA_DIR")
+    export NOTIFIER_DATA_DIR_WIN
+    PS1_PATH_WIN=$(cygpath -w "$SCRIPT_DIR/notifiers/windows.ps1" 2>/dev/null || echo "$SCRIPT_DIR/notifiers/windows.ps1")
+    echo "$INPUT" | powershell.exe -ExecutionPolicy Bypass -File "$PS1_PATH_WIN"
+elif grep -qi microsoft /proc/version 2>/dev/null; then
     # WSL (Windows Subsystem for Linux)
     NOTIFIER_DATA_DIR_WIN=$(wslpath -w "$DATA_DIR")
     export NOTIFIER_DATA_DIR_WIN
