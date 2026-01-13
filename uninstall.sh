@@ -17,12 +17,6 @@ echo "Claude Code Notifier Uninstaller"
 echo "================================="
 echo ""
 
-# Check if installed
-if [ ! -d "$INSTALL_DIR" ]; then
-    echo -e "${YELLOW}Claude Code Notifier is not installed.${NC}"
-    exit 0
-fi
-
 # Check for jq
 if ! command -v jq &> /dev/null; then
     echo -e "${RED}Error: jq is required for uninstallation.${NC}"
@@ -38,29 +32,24 @@ if [ -f "$SETTINGS_FILE" ]; then
     cp "$SETTINGS_FILE" "${SETTINGS_FILE}.bak"
 
     # Remove hooks containing .claude-code-notifier in command path
-    jq '
-        if .hooks then
-            .hooks |= with_entries(
-                .value |= map(
-                    select(
-                        .hooks | not or
-                        (.hooks | map(select(.command | contains(".claude-code-notifier"))) | length == 0)
-                    )
-                ) |
-                select(length > 0)
-            ) |
-            if .hooks == {} then del(.hooks) else . end
-        else
-            .
-        end
-    ' "$SETTINGS_FILE" > "${SETTINGS_FILE}.tmp" && mv "${SETTINGS_FILE}.tmp" "$SETTINGS_FILE"
+    jq 'if .hooks then
+        .hooks |= with_entries(
+            .value |= [.[] | select(
+                (.hooks // []) | all(.command | (contains(".claude-code-notifier") | not))
+            )]
+        ) |
+        .hooks |= with_entries(select(.value | length > 0)) |
+        if .hooks == {} then del(.hooks) else . end
+    else . end' "$SETTINGS_FILE" > "${SETTINGS_FILE}.tmp" && mv "${SETTINGS_FILE}.tmp" "$SETTINGS_FILE"
 
     echo "Hooks removed."
 fi
 
 # Remove installation directory
-echo "Removing installation directory..."
-rm -rf "$INSTALL_DIR"
+if [ -d "$INSTALL_DIR" ]; then
+    echo "Removing installation directory..."
+    rm -rf "$INSTALL_DIR"
+fi
 
 echo ""
 echo -e "${GREEN}Successfully uninstalled Claude Code Notifier.${NC}"
