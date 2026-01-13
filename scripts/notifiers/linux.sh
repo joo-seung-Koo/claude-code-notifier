@@ -12,7 +12,7 @@ if ! command -v notify-send &> /dev/null; then
 fi
 
 # Read config from environment or use defaults
-MIN_DURATION=${MIN_DURATION_SECONDS:-30}
+MIN_DURATION=${MIN_DURATION_SECONDS:-20}
 NOTIFY_MSG=${NOTIFY_MESSAGE:-"Task completed!"}
 NOTIF_TYPE=${NOTIFICATION_TYPE:-""}
 

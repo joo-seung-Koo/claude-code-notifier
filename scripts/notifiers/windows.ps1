@@ -3,7 +3,7 @@
 
 # Read configuration from environment variables
 $MIN_DURATION = [int]$env:MIN_DURATION_SECONDS
-if ($MIN_DURATION -eq 0) { $MIN_DURATION = 30 }
+if ($MIN_DURATION -eq 0) { $MIN_DURATION = 20 }
 
 $NOTIFY_MSG = $env:NOTIFY_MESSAGE
 if (-not $NOTIFY_MSG) { $NOTIFY_MSG = "Task completed!" }

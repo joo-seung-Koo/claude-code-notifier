@@ -16,10 +16,8 @@ INPUT=$(cat)
 # Detect notification type from JSON
 if command -v jq &> /dev/null; then
     NOTIFICATION_TYPE=$(echo "$INPUT" | jq -r '.notification_type // empty' 2>/dev/null)
-    HOOK_EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // empty' 2>/dev/null)
 else
     NOTIFICATION_TYPE=$(echo "$INPUT" | grep -o '"notification_type":"[^"]*"' | sed 's/"notification_type":"\(.*\)"/\1/' | head -1)
-    HOOK_EVENT=$(echo "$INPUT" | grep -o '"hook_event_name":"[^"]*"' | sed 's/"hook_event_name":"\(.*\)"/\1/' | head -1)
 fi
 
 # Determine message based on notification type

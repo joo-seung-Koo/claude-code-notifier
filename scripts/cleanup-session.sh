@@ -2,7 +2,6 @@
 # cleanup-session.sh - Cleans up session files when Claude Code session ends
 # Hook: SessionEnd
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DATA_DIR="$HOME/.claude-code-notifier/data"
 
 # Read stdin (JSON from Claude Code)

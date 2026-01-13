@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DATA_DIR="$HOME/.claude-code-notifier/data"
 
 # Read config from environment or use defaults
-MIN_DURATION=${MIN_DURATION_SECONDS:-30}
+MIN_DURATION=${MIN_DURATION_SECONDS:-20}
 NOTIFY_MSG=${NOTIFY_MESSAGE:-"Task completed!"}
 NOTIF_TYPE=${NOTIFICATION_TYPE:-""}
 
