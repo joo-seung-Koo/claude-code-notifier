@@ -74,6 +74,7 @@ Use the `/notifier` command in Claude Code:
 |---------|-------------|
 | `/notifier help` | Show available commands |
 | `/notifier status` | Show current configuration |
+| `/notifier lang <en\|ko>` | Set language (en: English, ko: 한국어) |
 | `/notifier duration <seconds>` | Set minimum task duration (default: 20) |
 | `/notifier preview <length>` | Set prompt preview length (default: 45) |
 | `/notifier test` | Send a test notification |
@@ -84,13 +85,11 @@ Use the `/notifier` command in Claude Code:
 Edit `~/.claude-code-notifier/scripts/config.sh`:
 
 ```bash
+# Language setting: "en" (English) or "ko" (한국어)
+NOTIFIER_LANG="en"
+
 # Minimum task duration (seconds) to trigger notification
 MIN_DURATION_SECONDS=20
-
-# Notification messages
-MSG_COMPLETED="Task completed!"
-MSG_PERMISSION="Permission required!"
-MSG_IDLE="Waiting for input..."
 
 # Number of characters to preview from the prompt
 PROMPT_PREVIEW_LENGTH=45
