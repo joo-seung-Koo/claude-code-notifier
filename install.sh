@@ -50,6 +50,7 @@ mkdir -p "$INSTALL_DIR/data"
 # Copy scripts
 echo "Copying scripts..."
 cp "$SCRIPT_DIR/VERSION" "$INSTALL_DIR/"
+cp "$SCRIPT_DIR/uninstall.sh" "$INSTALL_DIR/"
 cp "$SCRIPT_DIR/scripts/config.sh" "$INSTALL_DIR/scripts/"
 cp "$SCRIPT_DIR/scripts/save-prompt.sh" "$INSTALL_DIR/scripts/"
 cp "$SCRIPT_DIR/scripts/cleanup-session.sh" "$INSTALL_DIR/scripts/"
@@ -59,6 +60,7 @@ cp "$SCRIPT_DIR/scripts/notifiers/macos.sh" "$INSTALL_DIR/scripts/notifiers/"
 cp "$SCRIPT_DIR/scripts/notifiers/linux.sh" "$INSTALL_DIR/scripts/notifiers/"
 
 # Set execute permissions
+chmod +x "$INSTALL_DIR/"*.sh
 chmod +x "$INSTALL_DIR/scripts/"*.sh
 chmod +x "$INSTALL_DIR/scripts/notifiers/"*.sh
 
