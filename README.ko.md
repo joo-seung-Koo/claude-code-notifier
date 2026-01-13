@@ -18,8 +18,8 @@ Claude Code 작업 완료 시 알림을 받아보세요 (WSL/macOS/Linux)
 | 플랫폼 | 상태 |
 |--------|------|
 | macOS | ✅ 테스트 완료 |
+| Linux | ✅ 테스트 완료 (Docker) |
 | Windows (WSL2) | ⚠️ 미테스트 |
-| Linux | ⚠️ 미테스트 |
 
 > 문제를 발견하셨나요? [Issue를 열어주세요](https://github.com/js-koo/claude-code-notifier/issues)!
 

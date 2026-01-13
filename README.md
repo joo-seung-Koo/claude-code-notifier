@@ -18,8 +18,8 @@ Get notified when Claude Code completes your tasks (WSL/macOS/Linux)
 | Platform | Status |
 |----------|--------|
 | macOS | ✅ Tested |
+| Linux | ✅ Tested (Docker) |
 | Windows (WSL2) | ⚠️ Not tested yet |
-| Linux | ⚠️ Not tested yet |
 
 > Found an issue? Please [open an issue](https://github.com/js-koo/claude-code-notifier/issues)!
 
