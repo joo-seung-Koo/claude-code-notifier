@@ -1,5 +1,7 @@
 # claude-code-notifier
 
+[English](README.md) | [한국어](README.ko.md)
+
 Get notified when Claude Code completes your tasks (WSL/macOS/Linux)
 
 ## Features
@@ -141,4 +143,8 @@ MIT License - see [LICENSE](LICENSE) file.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome!
+
+- **Bug reports / Feature requests**: [Open an Issue](https://github.com/joo-seung-Koo/claude-code-notifier/issues)
+- **Code contributions**: Submit a Pull Request
+- **New language support**: Add `README.<lang>.md` and update `config.sh`
