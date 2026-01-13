@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/save-prompt.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/save-prompt.sh"
           }
         ]
       }
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/notify.sh"
           }
         ]
       }
@@ -25,7 +25,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-session.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/cleanup-session.sh"
           }
         ]
       }
@@ -36,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/notify.sh"
           }
         ]
       },
@@ -45,7 +45,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/notify.sh"
           }
         ]
       }

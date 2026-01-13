@@ -112,7 +112,7 @@ Claude Code에서 `/notifier` 명령어 사용:
 
 ### 수동 설정
 
-`~/.claude-code-notifier/scripts/config.sh` 편집:
+`~/.claude-code-notifier/hooks-handlers/config.sh` 편집:
 
 ```bash
 # 언어 설정: "en" (English) 또는 "ko" (한국어)

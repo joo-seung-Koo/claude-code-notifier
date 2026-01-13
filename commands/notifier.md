@@ -20,7 +20,7 @@ description: Configure claude-code-notifier settings
 
 ## Language Detection
 
-First, read NOTIFIER_LANG from ~/.claude-code-notifier/scripts/config.sh to determine response language.
+First, read NOTIFIER_LANG from ~/.claude-code-notifier/hooks-handlers/config.sh to determine response language.
 
 ## Task
 
@@ -75,7 +75,7 @@ Run these commands:
 mkdir -p ~/.claude-code-notifier/data
 echo "Test notification from /notifier" > ~/.claude-code-notifier/data/prompt-test.txt
 echo $(date +%s) > ~/.claude-code-notifier/data/timestamp-test.txt
-echo '{"session_id": "test"}' | ~/.claude-code-notifier/scripts/notify.sh
+echo '{"session_id": "test"}' | ~/.claude-code-notifier/hooks-handlers/notify.sh
 ```
 - **en:** "✅ Test notification sent!"
 - **ko:** "✅ 테스트 알림을 전송했습니다!"

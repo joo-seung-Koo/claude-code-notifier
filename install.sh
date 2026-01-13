@@ -44,26 +44,26 @@ fi
 
 # Create installation directory
 echo "Creating installation directory..."
-mkdir -p "$INSTALL_DIR/scripts/notifiers"
+mkdir -p "$INSTALL_DIR/hooks-handlers/notifiers"
 mkdir -p "$INSTALL_DIR/data"
 
-# Copy scripts
-echo "Copying scripts..."
+# Copy files
+echo "Copying files..."
 cp "$SCRIPT_DIR/VERSION" "$INSTALL_DIR/"
 cp "$SCRIPT_DIR/uninstall.sh" "$INSTALL_DIR/"
-cp "$SCRIPT_DIR/scripts/common.sh" "$INSTALL_DIR/scripts/"
-cp "$SCRIPT_DIR/scripts/config.sh" "$INSTALL_DIR/scripts/"
-cp "$SCRIPT_DIR/scripts/save-prompt.sh" "$INSTALL_DIR/scripts/"
-cp "$SCRIPT_DIR/scripts/cleanup-session.sh" "$INSTALL_DIR/scripts/"
-cp "$SCRIPT_DIR/scripts/notify.sh" "$INSTALL_DIR/scripts/"
-cp "$SCRIPT_DIR/scripts/notifiers/windows.ps1" "$INSTALL_DIR/scripts/notifiers/"
-cp "$SCRIPT_DIR/scripts/notifiers/macos.sh" "$INSTALL_DIR/scripts/notifiers/"
-cp "$SCRIPT_DIR/scripts/notifiers/linux.sh" "$INSTALL_DIR/scripts/notifiers/"
+cp "$SCRIPT_DIR/hooks-handlers/common.sh" "$INSTALL_DIR/hooks-handlers/"
+cp "$SCRIPT_DIR/hooks-handlers/config.sh" "$INSTALL_DIR/hooks-handlers/"
+cp "$SCRIPT_DIR/hooks-handlers/save-prompt.sh" "$INSTALL_DIR/hooks-handlers/"
+cp "$SCRIPT_DIR/hooks-handlers/cleanup-session.sh" "$INSTALL_DIR/hooks-handlers/"
+cp "$SCRIPT_DIR/hooks-handlers/notify.sh" "$INSTALL_DIR/hooks-handlers/"
+cp "$SCRIPT_DIR/hooks-handlers/notifiers/windows.ps1" "$INSTALL_DIR/hooks-handlers/notifiers/"
+cp "$SCRIPT_DIR/hooks-handlers/notifiers/macos.sh" "$INSTALL_DIR/hooks-handlers/notifiers/"
+cp "$SCRIPT_DIR/hooks-handlers/notifiers/linux.sh" "$INSTALL_DIR/hooks-handlers/notifiers/"
 
 # Set execute permissions
 chmod +x "$INSTALL_DIR/"*.sh
-chmod +x "$INSTALL_DIR/scripts/"*.sh
-chmod +x "$INSTALL_DIR/scripts/notifiers/"*.sh
+chmod +x "$INSTALL_DIR/hooks-handlers/"*.sh
+chmod +x "$INSTALL_DIR/hooks-handlers/notifiers/"*.sh
 
 # Install slash command
 echo "Installing slash command..."
@@ -86,9 +86,9 @@ cp "$SETTINGS_FILE" "${SETTINGS_FILE}.bak"
 echo "Backup created: ${SETTINGS_FILE}.bak"
 
 # Define hook commands with expanded paths
-SAVE_PROMPT_CMD="$INSTALL_DIR/scripts/save-prompt.sh"
-NOTIFY_CMD="$INSTALL_DIR/scripts/notify.sh"
-CLEANUP_CMD="$INSTALL_DIR/scripts/cleanup-session.sh"
+SAVE_PROMPT_CMD="$INSTALL_DIR/hooks-handlers/save-prompt.sh"
+NOTIFY_CMD="$INSTALL_DIR/hooks-handlers/notify.sh"
+CLEANUP_CMD="$INSTALL_DIR/hooks-handlers/cleanup-session.sh"
 
 # Function to add hook if not already present
 add_hook() {
@@ -161,7 +161,7 @@ add_hook "Notification" "$NOTIFY_CMD" "idle_prompt"
 echo ""
 echo -e "${GREEN}Installation complete!${NC}"
 echo ""
-echo "Configuration file: $INSTALL_DIR/scripts/config.sh"
+echo "Configuration file: $INSTALL_DIR/hooks-handlers/config.sh"
 echo "To uninstall: $INSTALL_DIR/uninstall.sh"
 echo ""
 echo "Restart Claude Code for changes to take effect."

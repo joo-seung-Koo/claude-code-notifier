@@ -112,7 +112,7 @@ Use the `/notifier` command in Claude Code:
 
 ### Manual Configuration
 
-Edit `~/.claude-code-notifier/scripts/config.sh`:
+Edit `~/.claude-code-notifier/hooks-handlers/config.sh`:
 
 ```bash
 # Language setting: "en" (English) or "ko" (한국어)
