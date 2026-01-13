@@ -59,7 +59,13 @@ Run the uninstall script:
 ```bash
 ~/.claude-code-notifier/uninstall.sh
 ```
-Show: "✅ claude-code-notifier has been uninstalled."
+Show:
+```
+✅ claude-code-notifier has been uninstalled.
+
+⚠️ Please restart Claude Code to complete the uninstallation.
+   (Type /exit or press Ctrl+C)
+```
 
 ### 6. `help` or empty/invalid command
 Show the available commands table above.
