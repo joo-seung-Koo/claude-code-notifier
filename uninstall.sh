@@ -51,6 +51,12 @@ if [ -d "$INSTALL_DIR" ]; then
     rm -rf "$INSTALL_DIR"
 fi
 
+# Remove slash command
+if [ -f "$HOME/.claude/commands/notifier.md" ]; then
+    echo "Removing slash command..."
+    rm -f "$HOME/.claude/commands/notifier.md"
+fi
+
 echo ""
 echo -e "${GREEN}Successfully uninstalled Claude Code Notifier.${NC}"
 echo ""

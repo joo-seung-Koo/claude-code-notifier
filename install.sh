@@ -64,6 +64,11 @@ chmod +x "$INSTALL_DIR/"*.sh
 chmod +x "$INSTALL_DIR/scripts/"*.sh
 chmod +x "$INSTALL_DIR/scripts/notifiers/"*.sh
 
+# Install slash command
+echo "Installing slash command..."
+mkdir -p "$HOME/.claude/commands"
+cp "$SCRIPT_DIR/commands/notifier.md" "$HOME/.claude/commands/"
+
 # Configure hooks in settings.json
 echo "Configuring Claude Code hooks..."
 
