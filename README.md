@@ -5,10 +5,11 @@ Get notified when Claude Code completes your tasks (WSL/macOS/Linux)
 ## Features
 
 - **Cross-platform**: Windows (WSL2), macOS, and Linux support
-- **Smart notifications**: Only notifies for tasks taking 30+ seconds
+- **Smart notifications**: Only notifies for tasks taking 20+ seconds
 - **Prompt preview**: Shows the first few characters of your prompt
 - **Session-aware**: Multiple Claude Code sessions work independently
 - **Zero config**: Works out of the box with sensible defaults
+- **Slash command**: Easy configuration with `/notifier` command
 
 ## Requirements
 
@@ -65,17 +66,33 @@ Or if you still have the repo:
 
 ## Configuration
 
+### Using Slash Command (Recommended)
+
+Use the `/notifier` command in Claude Code:
+
+| Command | Description |
+|---------|-------------|
+| `/notifier help` | Show available commands |
+| `/notifier status` | Show current configuration |
+| `/notifier duration <seconds>` | Set minimum task duration (default: 20) |
+| `/notifier preview <length>` | Set prompt preview length (default: 45) |
+| `/notifier test` | Send a test notification |
+
+### Manual Configuration
+
 Edit `~/.claude-code-notifier/scripts/config.sh`:
 
 ```bash
 # Minimum task duration (seconds) to trigger notification
-MIN_DURATION_SECONDS=30
+MIN_DURATION_SECONDS=20
 
-# Notification message
+# Notification messages
 MSG_COMPLETED="Task completed!"
+MSG_PERMISSION="Permission required!"
+MSG_IDLE="Waiting for input..."
 
 # Number of characters to preview from the prompt
-PROMPT_PREVIEW_LENGTH=10
+PROMPT_PREVIEW_LENGTH=45
 ```
 
 ## How It Works
@@ -84,7 +101,8 @@ This tool uses Claude Code's [hooks system](https://docs.anthropic.com/en/docs/c
 
 1. **UserPromptSubmit**: Save the prompt and start time when you submit a task
 2. **Stop**: Show a notification when Claude Code finishes (if duration > threshold)
-3. **SessionEnd**: Clean up temporary files when the session ends
+3. **Notification**: Alert when permission is required or Claude is waiting for input
+4. **SessionEnd**: Clean up temporary files when the session ends
 
 Session data is stored in `~/.claude-code-notifier/data/`.
 
