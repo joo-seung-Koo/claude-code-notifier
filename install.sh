@@ -1,0 +1,132 @@
+#!/bin/bash
+# install.sh - Claude Code Notifier Installer
+# Installs notification hooks for Claude Code
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+INSTALL_DIR="$HOME/.claude-code-notifier"
+SETTINGS_FILE="$HOME/.claude/settings.json"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo "Claude Code Notifier Installer"
+echo "==============================="
+echo ""
+
+# Check for jq dependency
+if ! command -v jq &> /dev/null; then
+    echo -e "${RED}Error: jq is required but not installed.${NC}"
+    echo ""
+    echo "Please install jq first:"
+    echo "  macOS:  brew install jq"
+    echo "  Ubuntu: sudo apt install jq"
+    echo "  Fedora: sudo dnf install jq"
+    exit 1
+fi
+
+# Check version if already installed
+if [ -f "$INSTALL_DIR/VERSION" ]; then
+    INSTALLED_VERSION=$(cat "$INSTALL_DIR/VERSION")
+    NEW_VERSION=$(cat "$SCRIPT_DIR/VERSION")
+
+    if [ "$INSTALLED_VERSION" = "$NEW_VERSION" ]; then
+        echo -e "${GREEN}Already up to date (v$NEW_VERSION)${NC}"
+        exit 0
+    else
+        echo -e "${YELLOW}Updating from v$INSTALLED_VERSION to v$NEW_VERSION...${NC}"
+    fi
+fi
+
+# Create installation directory
+echo "Creating installation directory..."
+mkdir -p "$INSTALL_DIR/scripts/notifiers"
+mkdir -p "$INSTALL_DIR/data"
+
+# Copy scripts
+echo "Copying scripts..."
+cp "$SCRIPT_DIR/VERSION" "$INSTALL_DIR/"
+cp "$SCRIPT_DIR/scripts/config.sh" "$INSTALL_DIR/scripts/"
+cp "$SCRIPT_DIR/scripts/save-prompt.sh" "$INSTALL_DIR/scripts/"
+cp "$SCRIPT_DIR/scripts/cleanup-session.sh" "$INSTALL_DIR/scripts/"
+cp "$SCRIPT_DIR/scripts/notify.sh" "$INSTALL_DIR/scripts/"
+cp "$SCRIPT_DIR/scripts/notifiers/windows.ps1" "$INSTALL_DIR/scripts/notifiers/"
+cp "$SCRIPT_DIR/scripts/notifiers/macos.sh" "$INSTALL_DIR/scripts/notifiers/"
+cp "$SCRIPT_DIR/scripts/notifiers/linux.sh" "$INSTALL_DIR/scripts/notifiers/"
+
+# Set execute permissions
+chmod +x "$INSTALL_DIR/scripts/"*.sh
+chmod +x "$INSTALL_DIR/scripts/notifiers/"*.sh
+
+# Configure hooks in settings.json
+echo "Configuring Claude Code hooks..."
+
+# Create .claude directory if it doesn't exist
+mkdir -p "$HOME/.claude"
+
+# Create settings.json if it doesn't exist
+if [ ! -f "$SETTINGS_FILE" ]; then
+    echo '{}' > "$SETTINGS_FILE"
+fi
+
+# Backup existing settings
+cp "$SETTINGS_FILE" "${SETTINGS_FILE}.bak"
+echo "Backup created: ${SETTINGS_FILE}.bak"
+
+# Define hook commands with expanded paths
+SAVE_PROMPT_CMD="$INSTALL_DIR/scripts/save-prompt.sh"
+NOTIFY_CMD="$INSTALL_DIR/scripts/notify.sh"
+CLEANUP_CMD="$INSTALL_DIR/scripts/cleanup-session.sh"
+
+# Function to add hook if not already present
+add_hook() {
+    local hook_type="$1"
+    local command="$2"
+
+    # Check if hook with this command already exists
+    local exists=$(jq --arg cmd "$command" --arg type "$hook_type" '
+        .hooks[$type] // [] |
+        map(select(.hooks[]?.command == $cmd)) |
+        length > 0
+    ' "$SETTINGS_FILE")
+
+    if [ "$exists" = "true" ]; then
+        echo "  $hook_type hook already registered, skipping..."
+        return
+    fi
+
+    # Add the hook
+    local hook_entry=$(jq -n --arg cmd "$command" '{
+        "hooks": [
+            {
+                "type": "command",
+                "command": $cmd
+            }
+        ]
+    }')
+
+    jq --arg type "$hook_type" --argjson entry "$hook_entry" '
+        .hooks //= {} |
+        .hooks[$type] //= [] |
+        .hooks[$type] += [$entry]
+    ' "$SETTINGS_FILE" > "${SETTINGS_FILE}.tmp" && mv "${SETTINGS_FILE}.tmp" "$SETTINGS_FILE"
+
+    echo "  $hook_type hook registered"
+}
+
+# Register hooks
+add_hook "UserPromptSubmit" "$SAVE_PROMPT_CMD"
+add_hook "Stop" "$NOTIFY_CMD"
+add_hook "SessionEnd" "$CLEANUP_CMD"
+
+echo ""
+echo -e "${GREEN}Installation complete!${NC}"
+echo ""
+echo "Configuration file: $INSTALL_DIR/scripts/config.sh"
+echo "To uninstall: $INSTALL_DIR/uninstall.sh"
+echo ""
+echo "Restart Claude Code for changes to take effect."
