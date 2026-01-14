@@ -45,6 +45,8 @@ elif grep -qi microsoft /proc/version 2>/dev/null; then
     # WSL (Windows Subsystem for Linux)
     NOTIFIER_DATA_DIR_WIN=$(wslpath -w "$DATA_DIR")
     export NOTIFIER_DATA_DIR_WIN
+    # WSLENV is required to pass environment variables from WSL to Windows processes
+    export WSLENV="MIN_DURATION_SECONDS:NOTIFY_MESSAGE:NOTIFICATION_TYPE:NOTIFIER_DATA_DIR_WIN"
     PS1_PATH_WIN=$(wslpath -w "$SCRIPT_DIR/notifiers/windows.ps1")
     echo "$INPUT" | powershell.exe -ExecutionPolicy Bypass -File "$PS1_PATH_WIN"
 elif [ "$(uname)" = "Darwin" ]; then

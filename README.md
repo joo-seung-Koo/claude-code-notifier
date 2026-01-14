@@ -31,7 +31,7 @@ Get notified when Claude Code completes your tasks (Windows/macOS/Linux)
 | macOS | ✅ Tested |
 | Linux | ✅ Tested (Docker) |
 | Windows (Native) | ⚠️ Not tested yet |
-| Windows (WSL2) | ⚠️ Not tested yet |
+| Windows (WSL2) | ✅ Tested |
 
 > Found an issue? Please [open an issue](https://github.com/js-koo/claude-code-notifier/issues)!
 
