@@ -13,7 +13,7 @@ json_get() {
     if command -v jq &> /dev/null; then
         echo "$json" | jq -r ".$field // empty" 2>/dev/null
     else
-        echo "$json" | grep -o "\"$field\":\"[^\"]*\"" | sed "s/\"$field\":\"\(.*\)\"/\1/" | head -1
+        echo "$json" | grep -oE "\"$field\":[[:space:]]*\"[^\"]*\"" | sed "s/\"$field\":[[:space:]]*\"\(.*\)\"/\1/" | head -1
     fi
 }
 
